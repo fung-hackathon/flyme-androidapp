@@ -2,12 +2,10 @@ package com.example.fung_p2hacks.HomeScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -22,7 +20,7 @@ import com.google.accompanist.pager.rememberPagerState
 
 val ticketList: List<Int> = listOf(R.drawable.moonticket, R.drawable.marsticket, R.drawable.saturnticket, R.drawable.neptuneticket, R.drawable.mysteryticket)
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun TicketComposable() {
     Column(
@@ -34,16 +32,11 @@ fun TicketComposable() {
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 5.dp, vertical = 10.dp)
+                .padding(horizontal = 20.dp, vertical = 10.dp)
         ) { page ->
-            Button(
+            Surface (
                 onClick = {/*TODO*/ },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Transparent,
-                    contentColor = Color.Transparent,
-                    disabledBackgroundColor = Color.Transparent
-                ),
-                modifier = Modifier.defaultMinSize(minHeight = 0.dp, minWidth = 0.dp)
+                color = MaterialTheme.colors.background
             ) {
                 Image(
                     painter = painterResource(ticketList[page]),
@@ -53,7 +46,7 @@ fun TicketComposable() {
                             val pageOffset =
                                 this@HorizontalPager.calculateCurrentOffsetForPage(page)
                             IntOffset(
-                                x = -(1.dp * pageOffset).roundToPx(),
+                                x = -(10.dp * pageOffset).roundToPx(),
                                 y = 0
                             )
                         }
