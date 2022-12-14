@@ -29,8 +29,8 @@ class HomeActivity : ComponentActivity() {
 fun Root() {
     Column {
         TopBarComposable()
-//        TicketComposable()
-//        FriendsActivityComposable()
+        TicketComposable()
+        FriendsActivityListComposable()
 //        MyHistoryComposable()
     }
 }
