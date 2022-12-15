@@ -63,7 +63,7 @@ fun FlymeLogoComposable() {
         painter = painterResource(R.drawable.logo),
         contentDescription = null,
         contentScale = ContentScale.Fit,
-        modifier = Modifier.padding(top = 50.dp, bottom = 50.dp, start = 50.dp, end = 50.dp)
+        modifier = Modifier.padding(top = 30.dp, bottom = 30.dp, start = 50.dp, end = 50.dp)
     )
 }
 
