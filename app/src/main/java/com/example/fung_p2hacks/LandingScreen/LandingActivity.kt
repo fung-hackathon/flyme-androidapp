@@ -52,8 +52,8 @@ fun LandingRootComposable(showLogIn: MutableState<Boolean>) {
 
         Spacer(Modifier.padding(5.dp))
 
-        if (showLogIn.value) LogInFields()
-        else SignUpFields()
+        if (showLogIn.value) LogInFields(onSignUpNavClicked = { showLogIn.value = false })
+        else SignUpFields(onLogInNavClicked = { showLogIn.value = true })
     }
 }
 
@@ -68,7 +68,7 @@ fun FlymeLogoComposable() {
 }
 
 @Composable
-fun SignUpFields() {
+fun SignUpFields(onLogInNavClicked: () -> Unit) {
     var signUpUserName by remember { mutableStateOf("") }
     var signUpUserID by remember { mutableStateOf("") }
     var signUpPassword by remember { mutableStateOf("") }
@@ -144,7 +144,7 @@ fun SignUpFields() {
         )
 
         Button(
-            onClick = {/*TODO*/},
+            onClick = onLogInNavClicked,
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Transparent,
             ),
@@ -168,7 +168,7 @@ fun SignUpFields() {
 }
 
 @Composable
-fun LogInFields() {
+fun LogInFields(onSignUpNavClicked: () -> Unit) {
     var logInUserId by remember { mutableStateOf("") }
     var logInPassword by remember { mutableStateOf("") }
 
@@ -210,7 +210,7 @@ fun LogInFields() {
         )
 
         Button(
-            onClick = {/*TODO*/},
+            onClick = onSignUpNavClicked,
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Transparent,
             ),
