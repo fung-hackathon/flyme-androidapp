@@ -10,6 +10,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.example.fung_p2hacks.ui.theme.FuNG_p2hacksTheme
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +21,9 @@ class HomeActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ){
-                    Root()
+                    Root(
+                        viewModel = viewModel()
+                    )
                 }
             }
         }
@@ -29,7 +32,9 @@ class HomeActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Root() {
+fun Root(
+    viewModel: HomeScreenViewModel
+) {
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded }
@@ -42,6 +47,7 @@ fun Root() {
         modifier = Modifier.fillMaxSize()
     ) {
         HomeBodyComposable(
+            viewModel = viewModel,
             modalOpener = {
                 coroutineScope.launch {
                     if (sheetState.isVisible) sheetState.hide()
@@ -54,6 +60,7 @@ fun Root() {
 
 @Composable
 fun HomeBodyComposable(
+    viewModel: HomeScreenViewModel,
     modalOpener: () -> Unit
 ) {
     Column {
