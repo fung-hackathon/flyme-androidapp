@@ -30,6 +30,10 @@
         <activity
             android:name=".HomeScreen.HomeActivity"
             android:theme="@style/Theme.FuNG_p2hacks">
+        </activity>
+        <activity
+            android:name=".LandingScreen.LandingActivity"
+            android:theme="@style/Theme.FuNG_p2hacks">
         </activity>>
     </application>
 
