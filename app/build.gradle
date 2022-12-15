@@ -25,6 +25,10 @@ android {
         }
     }
 
+    lintOptions {
+        //Because of a bug of Android Studio, suppressing the "Missing Permission" error.
+        disable 'MissingPermission'
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -71,6 +75,7 @@ dependencies {
     //Google map
     implementation 'com.google.maps.android:maps-compose:2.7.2'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
