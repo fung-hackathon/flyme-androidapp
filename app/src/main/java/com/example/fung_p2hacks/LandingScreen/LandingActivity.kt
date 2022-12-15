@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -20,7 +21,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.fung_p2hacks.R
 import com.example.fung_p2hacks.ui.theme.FuNG_p2hacksTheme
+import com.example.fung_p2hacks.ui.theme.Gray
 import com.example.fung_p2hacks.ui.theme.PrimaryWhite
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 class LandingActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,33 +82,35 @@ fun SignUpFields() {
         TextField(
             value = signUpUserName,
             onValueChange = { signUpUserName = it },
-            label = { Text("ユーザー名") },
+            placeholder = { Text("ユーザー名", color = Gray) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
                 focusedIndicatorColor = PrimaryWhite,
                 unfocusedIndicatorColor = PrimaryWhite
-            )
+            ),
+            modifier = Modifier.fillMaxWidth().padding(start = 25.dp, end = 25.dp)
         )
 
         TextField(
             value = signUpUserID,
             onValueChange = { signUpUserID = it },
-            label = { Text("ユーザーID") },
+            placeholder = { Text("ユーザーID", color = Gray) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
                 focusedIndicatorColor = PrimaryWhite,
                 unfocusedIndicatorColor = PrimaryWhite
-            )
+            ),
+            modifier = Modifier.fillMaxWidth().padding(start = 25.dp, end = 25.dp)
         )
 
         TextField(
             value = signUpPassword,
             onValueChange = { signUpPassword = it },
-            label = { Text("パスワード") },
+            placeholder = { Text("パスワード", color = Gray) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
@@ -116,13 +121,14 @@ fun SignUpFields() {
                 backgroundColor = Color.Transparent,
                 focusedIndicatorColor = PrimaryWhite,
                 unfocusedIndicatorColor = PrimaryWhite
-            )
+            ),
+            modifier = Modifier.fillMaxWidth().padding(start = 25.dp, end = 25.dp)
         )
 
         TextField(
             value = signUpPasswordConfirm,
             onValueChange = { signUpPasswordConfirm = it },
-            label = { Text("パスワードを再入力") },
+            placeholder = { Text("パスワードを再入力", color = Gray) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
@@ -133,25 +139,123 @@ fun SignUpFields() {
                 backgroundColor = Color.Transparent,
                 focusedIndicatorColor = PrimaryWhite,
                 unfocusedIndicatorColor = PrimaryWhite
-            )
+            ),
+            modifier = Modifier.fillMaxWidth().padding(start = 25.dp, end = 25.dp)
         )
+
+        Button(
+            onClick = {/*TODO*/},
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Transparent,
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row (
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("ログインはこちら")
+                Image(
+                    painter = painterResource(R.drawable.chevron_down),
+                    contentDescription = null,
+                    modifier = Modifier.rotate(270F).size(15.dp),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
     }
 }
 
 @Composable
 fun LogInFields() {
+    var logInUserId by remember { mutableStateOf("") }
+    var logInPassword by remember { mutableStateOf("") }
 
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        TextField(
+            value = logInUserId,
+            onValueChange = { logInUserId = it },
+            placeholder = { Text("ユーザーID", color = Gray) },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+                focusedIndicatorColor = PrimaryWhite,
+                unfocusedIndicatorColor = PrimaryWhite
+            ),
+            modifier = Modifier.fillMaxWidth().padding(start = 25.dp, end = 25.dp)
+        )
+
+        TextField(
+            value = logInPassword,
+            onValueChange = { logInPassword = it },
+            placeholder = { Text("パスワード", color = Gray) },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            visualTransformation = PasswordVisualTransformation(),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+                focusedIndicatorColor = PrimaryWhite,
+                unfocusedIndicatorColor = PrimaryWhite
+            ),
+            modifier = Modifier.fillMaxWidth().padding(start = 25.dp, end = 25.dp)
+        )
+
+        Button(
+            onClick = {/*TODO*/},
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Transparent,
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row (
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("新規登録はこちら")
+                Image(
+                    painter = painterResource(R.drawable.chevron_down),
+                    contentDescription = null,
+                    modifier = Modifier.rotate(270F).size(15.dp),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun LandingPreView() {
+fun LandingSignUpView() {
     FuNG_p2hacksTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ){
             val showLogInFields = remember { mutableStateOf(false) }
+            LandingRootComposable(showLogInFields)
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LandingLogInView() {
+    FuNG_p2hacksTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colors.background
+        ){
+            val showLogInFields = remember { mutableStateOf(true) }
             LandingRootComposable(showLogInFields)
         }
     }
