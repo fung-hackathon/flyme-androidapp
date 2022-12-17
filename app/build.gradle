@@ -1,11 +1,16 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
+    signingConfigs {
+        config {
+        }
+    }
     namespace 'com.example.fung_p2hacks'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.fung_p2hacks"
@@ -20,6 +25,10 @@ android {
         }
     }
 
+    lintOptions {
+        //Because of a bug of Android Studio, suppressing the "Missing Permission" error.
+        disable 'MissingPermission'
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -47,13 +56,27 @@ android {
 }
 
 dependencies {
-
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
+    implementation 'androidx.compose.runtime:runtime-livedata:1.3.2'
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.activity:activity-compose:1.3.1'
     implementation "androidx.compose.ui:ui:$compose_ui_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
     implementation 'androidx.compose.material:material:1.1.1'
+
+    //To use pager composable. For tickets in the HomeScreen
+    implementation "com.google.accompanist:accompanist-pager:0.28.0"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.28.0"
+
+    //To use lazyImage
+    implementation "io.coil-kt:coil-compose:2.2.2"
+
+    //Google map
+    implementation 'com.google.maps.android:maps-compose:2.7.2'
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
