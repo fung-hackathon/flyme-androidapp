@@ -40,4 +40,8 @@ class LocationService(private val fusedLocationClient: FusedLocationProviderClie
             Looper.getMainLooper()
         )
     }
+
+    fun stopLocationUpdate() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
 }

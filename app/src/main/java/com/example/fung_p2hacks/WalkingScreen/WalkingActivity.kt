@@ -2,30 +2,28 @@ package com.example.fung_p2hacks.WalkingScreen
 
 import android.Manifest
 import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.fung_p2hacks.LocationService.LocationService
-import com.example.fung_p2hacks.LocationService.RequestBackgroundLocationPermission
-import com.example.fung_p2hacks.LocationService.RequestCOARSELocationPermission
-import com.example.fung_p2hacks.LocationService.RequestFineLocationPermission
 import com.example.fung_p2hacks.ui.theme.FuNG_p2hacksTheme
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.rememberCameraPositionState
+import com.example.fung_p2hacks.R
 
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -34,9 +32,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationTokenSource
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import kotlinx.coroutines.runBlocking
+import com.google.maps.android.compose.*
 
 class WalkingActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +61,6 @@ class WalkingActivity: ComponentActivity() {
                     }
 
                     mLocationService.startLocationUpdate()
-
                     WalkingRootComposable(fusedLocationClient, mLocationService)
                 }
             }
@@ -75,6 +70,32 @@ class WalkingActivity: ComponentActivity() {
 
 @Composable
 fun WalkingRootComposable(
+    fusedLocationClient: FusedLocationProviderClient,
+    mLocationService: LocationService
+) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        MapComposable(
+            fusedLocationClient,
+            mLocationService
+        )
+
+        Column (
+            modifier = Modifier.fillMaxSize().padding(20.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(painter = painterResource(R.drawable.marsticket), contentDescription = null)
+            Button(onClick = {}) {
+                Text(text = "aaa")
+            }
+        }
+    }
+}
+
+@Composable
+fun MapComposable(
     fusedLocationClient: FusedLocationProviderClient,
     mLocationService: LocationService
 ) {
@@ -97,11 +118,15 @@ fun WalkingRootComposable(
             position = CameraPosition.fromLatLngZoom(pos, 18f)
         }
 
+        var uiSettings by remember { mutableStateOf(MapUiSettings()) }
+        uiSettings = uiSettings.copy(zoomControlsEnabled = false)
+
         val cLocation = mLocationService.currentLocation.observeAsState()
 
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
+            uiSettings = uiSettings,
             onMapLoaded = { mapReady = true }
         ) {
             Marker(
