@@ -43,7 +43,8 @@ fun BottomSheet() {
                 FriendsWrappingComposable(
                     onClick = {
                         //TODO
-                    }
+                    },
+                    modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
                 )
 
                 BottomSheetItem(
@@ -75,11 +76,13 @@ fun BottomSheet() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FriendsWrappingComposable(
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Surface(
         onClick = onClick,
-        color = MaterialTheme.colors.background
+        color = MaterialTheme.colors.background,
+        modifier = modifier
     ) {
         AddingFriendsComposable()
     }
@@ -98,7 +101,7 @@ fun AddingFriendsComposable() {
         Row(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(start = 20.dp, bottom = 10.dp)
+                .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
         ) {
             Text(
                 text = "友だちを追加",
