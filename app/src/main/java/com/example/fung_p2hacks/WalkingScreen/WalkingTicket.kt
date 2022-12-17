@@ -51,7 +51,7 @@ fun WalkingTicketComposable(
     val goalMeter = if (walkingType < 4) goalMeters[walkingType] else 10000*((meterWalked + 9999)/10000)
 
     Box(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(20.dp)
     ) {
         Image(painter = painterResource(walkingTicketList[walkingType]), contentDescription = null)
         Column(
