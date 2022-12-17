@@ -30,7 +30,7 @@ class LocationService(private val fusedLocationClient: FusedLocationProviderClie
     fun startLocationUpdate() {
         val locationRequest = LocationRequest().apply {
             interval = 10000
-            fastestInterval = 5000
+            fastestInterval = 10000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
