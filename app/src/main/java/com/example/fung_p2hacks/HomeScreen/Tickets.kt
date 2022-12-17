@@ -22,7 +22,9 @@ private val ticketList: List<Int> = listOf(R.drawable.moonticket, R.drawable.mar
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun TicketComposable() {
+fun TicketComposable(
+    onTicketClicked: List<() -> Unit>
+) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -35,7 +37,7 @@ fun TicketComposable() {
                 .padding(horizontal = 20.dp, vertical = 10.dp)
         ) { page ->
             Surface (
-                onClick = {/*TODO*/ },
+                onClick = onTicketClicked[page],
                 color = MaterialTheme.colors.background
             ) {
                 Image(
