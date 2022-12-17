@@ -88,6 +88,6 @@ fun HomeBodyComposable(
             )
         )
         FriendsActivityListComposable()
-//        MyHistoryComposable()
+        UserHistoryComposable()
     }
 }
