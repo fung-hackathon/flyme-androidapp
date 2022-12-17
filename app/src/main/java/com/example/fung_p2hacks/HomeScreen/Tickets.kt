@@ -18,7 +18,7 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
 
-val ticketList: List<Int> = listOf(R.drawable.moonticket, R.drawable.marsticket, R.drawable.saturnticket, R.drawable.neptuneticket, R.drawable.mysteryticket)
+private val ticketList: List<Int> = listOf(R.drawable.moonticket, R.drawable.marsticket, R.drawable.saturnticket, R.drawable.neptuneticket, R.drawable.mysteryticket)
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
