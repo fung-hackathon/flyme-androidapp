@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fung_p2hacks.R
@@ -39,22 +40,81 @@ fun BottomSheet() {
                         .clip(RoundedCornerShape(3.dp))
                 )
 
-                //TODO: 友達を追加
+                FriendsWrappingComposable(
+                    onClick = {
+                        //TODO
+                    },
+                    modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
+                )
 
                 BottomSheetItem(
                     text = "友だち申請",
-                    onClick = {},
+                    onClick = {
+                        //TODO
+                    },
                     additionalItem = { PendingFriendsComposable(num = 0) } //TODO: make num variable
                 )
                 BottomSheetItem(
                     text = "プロフィール設定",
-                    onClick = {}
+                    onClick = {
+                        //TODO
+                    }
                 )
                 BottomSheetItem(
                     text = "ログアウト",
-                    onClick = {}
+                    onClick = {
+                        //TODO
+                    }
                 )
             }
+        }
+    }
+}
+
+
+//onClick for Surface is in ExperimentalMaterialApi.
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun FriendsWrappingComposable(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        onClick = onClick,
+        color = MaterialTheme.colors.background,
+        modifier = modifier
+    ) {
+        AddingFriendsComposable()
+    }
+}
+
+@Composable
+fun AddingFriendsComposable() {
+    Box(
+        modifier = Modifier
+    ) {
+        Image(
+            painter = painterResource(R.drawable.friendaddingbox),
+            contentDescription = null
+        )
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
+        ) {
+            Text(
+                text = "友だちを追加",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+            )
+            Image(
+                painter = painterResource(R.drawable.chevron_down),
+                contentDescription = null,
+                modifier = Modifier
+                    .rotate(270F)
+                    .size(45.dp)
+            )
         }
     }
 }
@@ -111,6 +171,18 @@ fun PendingFriendsComposable(num: Int) {
                 color = PrimaryBlack,
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
             )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun friendBoxPreview() {
+    FuNG_p2hacksTheme {
+        Surface(
+            color = MaterialTheme.colors.background
+        ) {
+            AddingFriendsComposable()
         }
     }
 }

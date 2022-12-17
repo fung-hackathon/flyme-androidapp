@@ -18,11 +18,13 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
 
-val ticketList: List<Int> = listOf(R.drawable.moonticket, R.drawable.marsticket, R.drawable.saturnticket, R.drawable.neptuneticket, R.drawable.mysteryticket)
+private val ticketList: List<Int> = listOf(R.drawable.moonticket, R.drawable.marsticket, R.drawable.saturnticket, R.drawable.neptuneticket, R.drawable.mysteryticket)
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun TicketComposable() {
+fun TicketComposable(
+    onTicketClicked: List<() -> Unit>
+) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -35,7 +37,7 @@ fun TicketComposable() {
                 .padding(horizontal = 20.dp, vertical = 10.dp)
         ) { page ->
             Surface (
-                onClick = {/*TODO*/ },
+                onClick = onTicketClicked[page],
                 color = MaterialTheme.colors.background
             ) {
                 Image(
