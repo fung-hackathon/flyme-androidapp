@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,15 +15,88 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.fung_p2hacks.ui.theme.FuNG_p2hacksTheme
 import com.example.fung_p2hacks.R
 import com.example.fung_p2hacks.ui.theme.PrimaryWhite
 
-@Composable
-fun WalkingTicketComposable() {
+private val walkingTicketList: List<Int> = listOf(R.drawable.moonticket_thick, R.drawable.marsticket_thick, R.drawable.saturnticket_thick, R.drawable.neptuneticket_thick, R.drawable.mysteryticket_walking)
+private val targetNames: List<String> = listOf("MOON", "MARS", "SATURN", "NEPTUNE")
+private val goalMeters: List<Int> = listOf(1500, 4000, 8000, 10000)
 
+fun timeElapsedFormatter(timeInSec: Int): String {
+    var res = if (timeInSec < 3600) "${timeInSec/60}" else { if (timeInSec < 86400) "${timeInSec/3600}" else "${timeInSec/86400}" }
+    //val needPlural = res.toInt() > 1
+
+    res += if (timeInSec < 3600) "min" else { if (timeInSec < 86400) "hour" else "day" }
+    //if (needPlural) res += "s"
+
+    return res
+}
+
+private fun getTargetName(walkingType: Int, goalMeter: Int): String {
+    return if (walkingType < 4) targetNames[walkingType] else "${goalMeter/1000}km"
+}
+
+@Composable
+fun WalkingTicketComposable(
+    walkingType: Int,
+    secondsElapse: Int,
+    meterWalked: Int,
+) {
+    //Set defined meter if walkingType < 4. Otherwise 10[km]*ceil(meterWalked/10000)
+    val goalMeter = if (walkingType < 4) goalMeters[walkingType] else 10000*((meterWalked + 9999)/10000)
+
+    Box(
+        modifier = Modifier.padding(10.dp)
+    ) {
+        Image(painter = painterResource(walkingTicketList[walkingType]), contentDescription = null)
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(start = 15.dp, end = 15.dp),
+            verticalArrangement = Arrangement.Top,
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = timeElapsedFormatter(secondsElapse),
+                    fontSize = 42.sp,
+                    fontWeight = FontWeight.Light
+                )
+                Spacer(Modifier.padding(start = 20.dp))
+                Text(
+                    text = "${meterWalked/1000}.${(meterWalked/100)%10}km",
+                    fontSize = 42.sp,
+                    fontWeight = FontWeight.Light
+                )
+            }
+
+            ProgressBarComposable(
+                maxValue = goalMeter.toDouble(),
+                currentValue = meterWalked.toDouble(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(30.dp)
+                    .padding(top = 10.dp)
+            )
+
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "EARTH", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = getTargetName(walkingType, goalMeter),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -69,7 +143,8 @@ fun ProgressBarComposable(
         Image(
             painter = painterResource(R.drawable.rocket),
             contentDescription = null,
-            modifier = Modifier.size(40.dp, 40.dp)
+            modifier = Modifier
+                .size(30.dp, 30.dp)
                 .align(Alignment.CenterStart)
                 .offset(x = rocketPos)
                 .rotate(90f)
@@ -109,6 +184,22 @@ fun progressBarPreview25() {
                     .padding(start = 20.dp, end = 20.dp),
                 currentValue = 25.0
             )
+        }
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun ticketPreview() {
+    FuNG_p2hacksTheme {
+        Surface(
+            color = MaterialTheme.colors.background
+        ) {
+            WalkingTicketComposable(walkingType = 0, secondsElapse = 360, meterWalked = 900)
+            WalkingTicketComposable(walkingType = 1, secondsElapse = 360, meterWalked = 3600)
+            WalkingTicketComposable(walkingType = 2, secondsElapse = 360, meterWalked = 6500)
+            WalkingTicketComposable(walkingType = 3, secondsElapse = 3600, meterWalked = 9000)
+            //WalkingTicketComposable(walkingType = 4, secondsElapse = 10800, meterWalked = 36000)
         }
     }
 }
