@@ -18,6 +18,7 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
+        //buildConfigField("String", "API_URL", "\"${API_URL}\"")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -30,9 +31,18 @@ android {
         disable 'MissingPermission'
     }
     buildTypes {
+        def properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        def API_URL = properties.getProperty("API_URL")
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "API_URL", "\"${API_URL}\"")
+        }
+
+        debug {
+            buildConfigField("String", "API_URL", "\"${API_URL}\"")
         }
     }
     compileOptions {

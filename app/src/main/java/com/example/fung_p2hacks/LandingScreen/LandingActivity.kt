@@ -1,5 +1,8 @@
 package com.example.fung_p2hacks.LandingScreen
 
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,12 +16,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fung_p2hacks.R
 import com.example.fung_p2hacks.ui.theme.FuNG_p2hacksTheme
 import com.example.fung_p2hacks.ui.theme.Gray
@@ -35,7 +42,8 @@ class LandingActivity: ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ){
                     val showLogInFields = remember { mutableStateOf(false) }
-                    LandingRootComposable(showLogInFields)
+                    val landingViewModel: LandingScreenViewModel = viewModel()
+                    LandingRootComposable(landingViewModel, showLogInFields)
                 }
             }
         }
@@ -43,7 +51,10 @@ class LandingActivity: ComponentActivity() {
 }
 
 @Composable
-fun LandingRootComposable(showLogIn: MutableState<Boolean>) {
+fun LandingRootComposable(
+    viewModel: LandingScreenViewModel,
+    showLogIn: MutableState<Boolean>
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -52,8 +63,8 @@ fun LandingRootComposable(showLogIn: MutableState<Boolean>) {
 
         Spacer(Modifier.padding(5.dp))
 
-        if (showLogIn.value) LogInFields(onSignUpNavClicked = { showLogIn.value = false })
-        else SignUpFields(onLogInNavClicked = { showLogIn.value = true })
+        if (showLogIn.value) LogInFields(viewModel, onSignUpNavClicked = { showLogIn.value = false })
+        else SignUpFields(viewModel, onLogInNavClicked = { showLogIn.value = true })
     }
 }
 
@@ -68,7 +79,10 @@ fun FlymeLogoComposable() {
 }
 
 @Composable
-fun SignUpFields(onLogInNavClicked: () -> Unit) {
+fun SignUpFields(
+    viewModel: LandingScreenViewModel,
+    onLogInNavClicked: () -> Unit
+) {
     var signUpUserName by remember { mutableStateOf("") }
     var signUpUserID by remember { mutableStateOf("") }
     var signUpPassword by remember { mutableStateOf("") }
@@ -144,6 +158,30 @@ fun SignUpFields(onLogInNavClicked: () -> Unit) {
         )
 
         Button(
+            onClick = {
+
+            },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Transparent,
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row (
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("登録")
+                Image(
+                    painter = painterResource(R.drawable.chevron_down),
+                    contentDescription = null,
+                    modifier = Modifier.rotate(270F).size(15.dp),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
+
+        Button(
             onClick = onLogInNavClicked,
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Transparent,
@@ -168,7 +206,10 @@ fun SignUpFields(onLogInNavClicked: () -> Unit) {
 }
 
 @Composable
-fun LogInFields(onSignUpNavClicked: () -> Unit) {
+fun LogInFields(
+    viewModel: LandingScreenViewModel,
+    onSignUpNavClicked: () -> Unit
+) {
     var logInUserId by remember { mutableStateOf("") }
     var logInPassword by remember { mutableStateOf("") }
 
@@ -210,6 +251,28 @@ fun LogInFields(onSignUpNavClicked: () -> Unit) {
         )
 
         Button(
+            onClick = { viewModel.tryLogIn(logInPassword, logInPassword) },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Transparent,
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row (
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("ログイン")
+                Image(
+                    painter = painterResource(R.drawable.chevron_down),
+                    contentDescription = null,
+                    modifier = Modifier.rotate(270F).size(15.dp),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
+
+        Button(
             onClick = onSignUpNavClicked,
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Transparent,
@@ -233,30 +296,30 @@ fun LogInFields(onSignUpNavClicked: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun LandingSignUpView() {
-    FuNG_p2hacksTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
-        ){
-            val showLogInFields = remember { mutableStateOf(false) }
-            LandingRootComposable(showLogInFields)
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LandingLogInView() {
-    FuNG_p2hacksTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
-        ){
-            val showLogInFields = remember { mutableStateOf(true) }
-            LandingRootComposable(showLogInFields)
-        }
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun LandingSignUpView() {
+//    FuNG_p2hacksTheme {
+//        Surface(
+//            modifier = Modifier.fillMaxSize(),
+//            color = MaterialTheme.colors.background
+//        ){
+//            val showLogInFields = remember { mutableStateOf(false) }
+//            LandingRootComposable(showLogInFields)
+//        }
+//    }
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun LandingLogInView() {
+//    FuNG_p2hacksTheme {
+//        Surface(
+//            modifier = Modifier.fillMaxSize(),
+//            color = MaterialTheme.colors.background
+//        ){
+//            val showLogInFields = remember { mutableStateOf(true) }
+//            LandingRootComposable(showLogInFields)
+//        }
+//    }
+//}
