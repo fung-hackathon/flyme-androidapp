@@ -23,12 +23,13 @@ import androidx.compose.ui.unit.sp
 import com.example.fung_p2hacks.ui.theme.FuNG_p2hacksTheme
 import com.example.fung_p2hacks.R
 import com.example.fung_p2hacks.ui.theme.PrimaryWhite
+import java.lang.Integer.min
 
 private val walkingTicketList: List<Int> = listOf(R.drawable.moonticket_thick, R.drawable.marsticket_thick, R.drawable.saturnticket_thick, R.drawable.neptuneticket_thick, R.drawable.mysteryticket_walking)
 private val targetNames: List<String> = listOf("MOON", "MARS", "SATURN", "NEPTUNE")
 private val goalMeters: List<Int> = listOf(1500, 4000, 8000, 10000)
 
-fun timeElapsedFormatter(timeInSec: Long): String {
+private fun timeElapsedFormatter(timeInSec: Long): String {
     var res = if (timeInSec < 3600) "${timeInSec/60}" else { if (timeInSec < 86400) "${timeInSec/3600}" else "${timeInSec/86400}" }
     //val needPlural = res.toInt() > 1
 
@@ -67,7 +68,7 @@ fun WalkingTicketComposable(
     Box(
         modifier = Modifier.padding(15.dp)
     ) {
-        Image(painter = painterResource(walkingTicketList[walkingType]), contentDescription = null)
+        Image(painter = painterResource(walkingTicketList[min(4, walkingType)]), contentDescription = null)
         Column(
             modifier = Modifier
                 .fillMaxWidth()

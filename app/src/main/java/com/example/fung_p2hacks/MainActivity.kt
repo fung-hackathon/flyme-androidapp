@@ -9,6 +9,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.platform.LocalContext
 import com.example.fung_p2hacks.HomeScreen.HomeActivity
+import com.example.fung_p2hacks.LandingScreen.LandingActivity
+import com.example.fung_p2hacks.WalkingScreen.WalkingActivity
 import com.example.fung_p2hacks.ui.theme.FuNG_p2hacksTheme
 
 class MainActivity : ComponentActivity() {

@@ -40,7 +40,7 @@ fun TopIconComposable(
         onClick = onClicked,
         color = MaterialTheme.colors.background
     ) {
-        Box(modifier = Modifier.size(40.dp).clip(CircleShape).background(Color.Red))
+        Box(modifier = Modifier.size(40.dp).clip(CircleShape).background(Color.White))
     }
 }
 

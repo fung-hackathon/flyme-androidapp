@@ -58,7 +58,7 @@ fun FriendActivityLeft(friendName: String) {
             modifier = Modifier
                 .size(35.dp)
                 .clip(CircleShape)
-                .background(Color.Red)
+                .background(Color.White)
         )
         Spacer(modifier = Modifier.padding(5.dp))
         Column (
