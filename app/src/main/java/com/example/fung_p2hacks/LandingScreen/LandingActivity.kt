@@ -33,6 +33,7 @@ import com.example.fung_p2hacks.ui.theme.Gray
 import com.example.fung_p2hacks.ui.theme.PrimaryWhite
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.flow.*
 
 class LandingActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,9 +44,9 @@ class LandingActivity: ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ){
-                    val showLogInFields = remember { mutableStateOf(false) }
                     val landingViewModel: LandingScreenViewModel = viewModel()
-                    LandingRootComposable(landingViewModel, showLogInFields)
+                    val showLogin = landingViewModel.showLoginFields.collectAsState()
+                    LandingRootComposable(landingViewModel, showLogin = showLogin)
                 }
             }
         }
@@ -57,13 +58,13 @@ class LandingActivity: ComponentActivity() {
 @Composable
 fun LandingRootComposable(
     viewModel: LandingScreenViewModel,
-    showLogIn: MutableState<Boolean>
+    showLogin: State<Boolean>
 ) {
+    //TODO: Is it right that request permissions in here?
     val permissionState = rememberMultiplePermissionsState(
             permissions = listOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.INTERNET
+                Manifest.permission.ACCESS_COARSE_LOCATION
             )
         )
 
@@ -74,18 +75,33 @@ fun LandingRootComposable(
         println("Permission Granted")
     }
 
+    val thisContext = LocalContext.current
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         FlymeLogoComposable()
         Spacer(Modifier.padding(5.dp))
-        if (showLogIn.value) {
+        if (showLogin.value) {
+            val loginId = viewModel.logInUserId.collectAsState()
+            val loginPassword = viewModel.logInPassword.collectAsState()
             LogInFields(
-                viewModel,
-                onSignUpNavClicked = { showLogIn.value = false }
+                loginId = loginId,
+                loginPassword = loginPassword,
+                onLoginIdChanged = {
+                    viewModel.onLogInUserIdChange(it)
+                },
+                onLoginPasswordChanged = { viewModel.onlogInPasswordChange(it) },
+                onLoginButtonClicked = { viewModel.tryLogIn(thisContext) },
+                onSignUpNavClicked = { viewModel.invertShowLogin() }
             )
-        } else SignUpFields(viewModel, onLogInNavClicked = { showLogIn.value = true })
+        } else {
+            SignUpFields(
+                //TODO
+                onLogInNavClicked = { viewModel.invertShowLogin() }
+            )
+        }
     }
 }
 
@@ -101,7 +117,6 @@ fun FlymeLogoComposable() {
 
 @Composable
 fun SignUpFields(
-    viewModel: LandingScreenViewModel,
     onLogInNavClicked: () -> Unit
 ) {
     var signUpUserName by remember { mutableStateOf("") }
@@ -240,12 +255,18 @@ fun SignUpFields(
 
 @Composable
 fun LogInFields(
-    viewModel: LandingScreenViewModel,
+    loginId: State<String>,
+    loginPassword: State<String>,
+    onLoginIdChanged: (String) -> Unit,
+    onLoginPasswordChanged: (String) -> Unit,
+    onLoginButtonClicked: () -> Unit,
     onSignUpNavClicked: () -> Unit
 ) {
-    var logInUserId by remember { mutableStateOf("") }
-    var logInPassword by remember { mutableStateOf("") }
-    val thisContext = LocalContext.current
+    val textFieldColor = TextFieldDefaults.textFieldColors(
+        backgroundColor = Color.Transparent,
+        focusedIndicatorColor = PrimaryWhite,
+        unfocusedIndicatorColor = PrimaryWhite
+    )
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -253,49 +274,32 @@ fun LogInFields(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
-            value = logInUserId,
-            onValueChange = { logInUserId = it },
+            value = loginId.value,
+            onValueChange = { onLoginIdChanged(it) },
             placeholder = { Text("ユーザーID", color = Gray) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-                focusedIndicatorColor = PrimaryWhite,
-                unfocusedIndicatorColor = PrimaryWhite
-            ),
+            colors = textFieldColor,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 25.dp, end = 25.dp)
         )
 
         TextField(
-            value = logInPassword,
-            onValueChange = { logInPassword = it },
+            value = loginPassword.value,
+            onValueChange = { onLoginPasswordChanged(it) },
             placeholder = { Text("パスワード", color = Gray) },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
             visualTransformation = PasswordVisualTransformation(),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-                focusedIndicatorColor = PrimaryWhite,
-                unfocusedIndicatorColor = PrimaryWhite
-            ),
+            colors = textFieldColor,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 25.dp, end = 25.dp)
         )
 
         Button(
-            onClick = {
-                viewModel.tryLogIn(logInUserId, logInPassword, thisContext)
-                thisContext.startActivity(
-                    Intent(thisContext, HomeActivity::class.java)
-                )
-                (thisContext as Activity).finish()
-            },
+            onClick = { onLoginButtonClicked() },
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Transparent,
             ),
