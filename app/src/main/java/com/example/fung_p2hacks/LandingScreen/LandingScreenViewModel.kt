@@ -67,10 +67,11 @@ class LandingScreenViewModel: ViewModel() {
 
         viewModelScope.launch {
             val api = FlymeAPI.Instance()
-            val logInUser: LogInUser = LogInUser(userId, loginPassword)
+            val logInUser = LogInUser(userId, loginPassword)
             try {
                 val res = api.userLogIn(logInUser)
                 if (res.code() == 200) {
+                    println(res.raw())
                     println("Credential: ${res.body()!!.token}")
                     token = res.body()!!.token
 
@@ -92,6 +93,8 @@ class LandingScreenViewModel: ViewModel() {
                         putString("current_token", token)
                         apply()
                     }
+
+                    this@LandingScreenViewModel._isLoginSuccess.value = true
                 } else {
                     println("Error!: ${res.raw()}")
                 }

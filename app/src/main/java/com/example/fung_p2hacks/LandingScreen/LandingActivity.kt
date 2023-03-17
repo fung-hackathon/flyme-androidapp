@@ -39,13 +39,22 @@ class LandingActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val landingViewModel: LandingScreenViewModel = viewModel()
+            val showLogin = landingViewModel.showLoginFields.collectAsState()
+            val loginSuccess = landingViewModel.isLoginSuccess.collectAsState()
+
+            //TODO: Check if an user had been logged in. (Stored in shared preference)
+            if (loginSuccess.value) {
+                val intent = Intent(LocalContext.current, HomeActivity::class.java)
+                LocalContext.current.startActivity(intent)
+                (LocalContext.current as Activity).finish()
+            }
+
             FuNG_p2hacksTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
-                ){
-                    val landingViewModel: LandingScreenViewModel = viewModel()
-                    val showLogin = landingViewModel.showLoginFields.collectAsState()
+                ) {
                     LandingRootComposable(landingViewModel, showLogin = showLogin)
                 }
             }
