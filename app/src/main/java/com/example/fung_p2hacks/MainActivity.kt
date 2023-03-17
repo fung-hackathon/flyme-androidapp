@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                     LocalContext.current.startActivity(
                         Intent(
                             LocalContext.current,
-                            HomeActivity::class.java
+                            LandingActivity::class.java
                         )
                     )
                     (LocalContext.current as Activity).finish()
