@@ -78,19 +78,25 @@ class LandingScreenViewModel: ViewModel() {
                     val idPref = context.getSharedPreferences(context.getString(R.string.user_id), Context.MODE_PRIVATE)
                     val pasPref = context.getSharedPreferences(context.getString(R.string.user_password), Context.MODE_PRIVATE)
                     val tokenPref = context.getSharedPreferences(context.getString(R.string.api_access_token), Context.MODE_PRIVATE)
+                    val isLoggedIn = context.getSharedPreferences(context.getString(R.string.is_logged_in), Context.MODE_PRIVATE)
 
                     with(idPref.edit()) {
-                        putString("user_id", userId)
+                        putString(context.getString(R.string.user_id), userId)
                         apply()
                     }
 
                     with(pasPref.edit()) {
-                        putString("user_password", loginPassword)
+                        putString(context.getString(R.string.user_password), loginPassword)
                         apply()
                     }
 
                     with(tokenPref.edit()) {
-                        putString("current_token", token)
+                        putString(context.getString(R.string.api_access_token), token)
+                        apply()
+                    }
+
+                    with(isLoggedIn.edit()) {
+                        putBoolean(context.getString(R.string.is_logged_in), true)
                         apply()
                     }
 
