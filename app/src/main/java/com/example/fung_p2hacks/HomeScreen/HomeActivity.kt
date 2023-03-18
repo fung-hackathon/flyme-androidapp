@@ -49,22 +49,24 @@ fun Root(
         sheetContent = { BottomSheet() },
         modifier = Modifier.fillMaxSize()
     ) {
-        HomeBodyComposable(
-            viewModel = viewModel,
-            modalOpener = {
-                coroutineScope.launch {
-                    if (sheetState.isVisible) sheetState.hide()
-                    else sheetState.show()
+        Column {
+            TopBarComposable(
+                onIconClick =  {
+                    coroutineScope.launch {
+                        if (sheetState.isVisible) sheetState.hide()
+                        else sheetState.show()
+                    }
                 }
-            },
-        )
+            )
+            HomeBodyComposable(viewModel = viewModel)
+        }
     }
 }
 
 @Composable
 fun HomeBodyComposable(
-    viewModel: HomeScreenViewModel,
-    modalOpener: () -> Unit,
+    //It may be good that this function takes lists of user history and friend activity from the Root composable.
+    viewModel: HomeScreenViewModel
 ) {
     var ticketNumber by remember { mutableStateOf(-1) }
 
@@ -77,7 +79,6 @@ fun HomeBodyComposable(
     }
 
     Column {
-        TopBarComposable(modalOpener)
         TicketComposable(
             listOf(
                 { ticketNumber = 0 },
