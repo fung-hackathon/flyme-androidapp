@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Flyme</string>
 
+    <string name="is_logged_in">user_is_logged_in</string>
     <string name="user_id">user_id_preference</string>
     <string name="user_password">user_password_preference</string>
     <string name="api_access_token">api_access_token_preference</string>
