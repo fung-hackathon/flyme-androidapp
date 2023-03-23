@@ -62,7 +62,9 @@ fun TicketComposable(
 
         HorizontalPagerIndicator(
             pagerState = pagerState,
-            modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 0.dp, bottom = 10.dp),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(vertical = verticalPaddingValue),
             activeColor = PrimaryWhite,
             inactiveColor = Gray
         )
