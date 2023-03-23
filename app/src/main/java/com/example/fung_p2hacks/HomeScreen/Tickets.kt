@@ -19,6 +19,9 @@ import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
 
 private val ticketList: List<Int> = listOf(R.drawable.moonticket, R.drawable.marsticket, R.drawable.saturnticket, R.drawable.neptuneticket, R.drawable.mysteryticket)
+private val ticketAspectRatio = 1392f / 636f
+private val horizontalPaddingValue = 16.dp
+private val verticalPaddingValue = 10.dp
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -29,30 +32,31 @@ fun TicketComposable(
         modifier = Modifier.fillMaxWidth()
     ) {
         val pagerState = rememberPagerState()
-        HorizontalPager(
-            count = 5,
-            state = pagerState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 10.dp)
-        ) { page ->
-            Surface (
-                onClick = onTicketClicked[page],
-                color = MaterialTheme.colors.background
-            ) {
-                Image(
-                    painter = painterResource(ticketList[page]),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .offset {
-                            val pageOffset =
-                                this@HorizontalPager.calculateCurrentOffsetForPage(page)
-                            IntOffset(
-                                x = -(10.dp * pageOffset).roundToPx(),
-                                y = 0
-                            )
-                        }
-                )
+
+        BoxWithConstraints {
+            val ticketWidth = maxWidth - horizontalPaddingValue * 2
+            val ticketHeight = ticketWidth / ticketAspectRatio
+            val pageSpacing = horizontalPaddingValue / 2
+
+            HorizontalPager(
+                count = 5,
+                state = pagerState,
+                contentPadding = PaddingValues(horizontal = horizontalPaddingValue),
+                itemSpacing = pageSpacing,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) { page ->
+                Surface (
+                    onClick = onTicketClicked[page],
+                    color = MaterialTheme.colors.background
+                ) {
+                    Image(
+                        painter = painterResource(ticketList[page]),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(width = ticketWidth, height = ticketHeight)
+                    )
+                }
             }
         }
 
