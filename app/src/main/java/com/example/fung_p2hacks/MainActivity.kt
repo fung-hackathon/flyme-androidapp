@@ -10,9 +10,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.fung_p2hacks.HomeScreen.HomeActivity
 import com.example.fung_p2hacks.LandingScreen.LandingActivity
-import com.example.fung_p2hacks.WalkingScreen.WalkingActivity
 import com.example.fung_p2hacks.ui.theme.FuNG_p2hacksTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,11 +22,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val isUserLoggedIn = LocalContext.current
-                .getSharedPreferences(stringResource(R.string.is_logged_in), Context.MODE_PRIVATE)?.getBoolean(stringResource(R.string.is_logged_in), false)
+                .getSharedPreferences(stringResource(R.string.is_logged_in), Context.MODE_PRIVATE)
+                ?.getBoolean(stringResource(R.string.is_logged_in), false)
                 ?: false
-
+/*
+            val navController = rememberNavController()
+            NavHost(
+                navController = navController,
+                startDestination = if (isUserLoggedIn) "landing" else "home",
+            ) {
+                composable("landing") {}
+                composable("home") {}
+                composable("walking") {}
+            }
+*/
             FuNG_p2hacksTheme {
-                Surface (color = MaterialTheme.colors.background) {
+                Surface(color = MaterialTheme.colors.background) {
                     LocalContext.current.startActivity(
                         Intent(
                             LocalContext.current,
